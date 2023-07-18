@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <title>
+        MDSi Peter Pan API Documentation
+    </title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+
+    <link href="../assets/css/toolkit-inverse.css" rel="stylesheet">
+
+    <link href="../assets/css/docs.css" rel="stylesheet">
+
+    <link href="../assets/css/application.css" rel="stylesheet">
+    <style>
+        /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+        /* this chunk of css is not part of the toolkit :) */
+
+        body {
+            min-width: 100%;
+            width: 1px;
+            *width: 100%;
+        }
+    </style>
+</head>
+
+<body class="with-top-navbar">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand navbar-brand-emphasized" href="index.html">
+                    <span>
+                        <img class="img-responsive logo" src="../assets/img/mdsi-logo-white.gif" alt="MDSi Logo" />
+                    </span>
+                    <span class="navbar-brand-icon"></span>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="../index.html" onclick="changeActiveAttribute('overview')">Overview</a>
+                    </li>
+                    <li class="active">
+                        <a href="../releases/index.html">Releases</a>
+                    </li>
+                    <li>
+                        <a href="../versioning.html">Versioning</a>
+                    </li>
+                    <li>
+                        <a href="../security.html">Security</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="docs-header" id="content">
+        <div class="container">
+            <h1>peter pan</h1>
+            <p>Peter Pan is a RESTful API for Comcast to create sales orders with MDSi.</p>
+        </div>
+    </div>
+    <div class="container docs-content">
+        <h2>Version 1.0</h2>
+        <p>Version 1.0 is to be used by the Comcast Asset Recover Center (COMC901).  All other Comcast Customers should be using version 2.0.</p>
+        <h3>Endpoints</h3>
+        <ul>
+            <li>Sales Orders</li>
+            <li>Diagnostics/Version</li>
+            <li>Diagnostics/Heartbeat</li>
+            <li>Diagnostics/Authentication Test</li>
+            <li>Diagnostics/Api Name</li>
+        </ul>
+        <h3>Base URLS</h3>
+        <ul>
+            <li>
+                UAT
+                <pre><code>https://mdsi-peter-pan-eus-uat-v1-0.azurewebsites.net/api/</code></pre>
+            </li>
+            <li>
+                PRD
+                <pre><code>https://mdsi-peter-pan-eus-prd-v1-0.azurewebsites.net/api/</code></pre>
+            </li>
+        </ul>
+        <h3>Security</h3>
+        <h4>HTTP Status Codes</h4>
+        <ul>
+            <li>If you do not pass a valid access token, you will receive a 401 unauthorized response.</li>
+            <li>
+                If you do not pass a static function key in the header (key=x-functions-key), you will receive a 401
+                unauthorized response.
+            </li>
+            <li>
+                If your API key access token is valid, yet it does not contain the correct scope, you will receive a 403
+                forbidden response.
+            </li>
+            <li>
+                If your API key access token is valid, yet you request data for a customer to which you token is not
+                bound, you will receive a 403 forbidden response.
+            </li>
+        </ul>
+
+        <h2>API Endpoints</h2>
+        <h3>Sales Order</h3>
+        <p>This API endpoint is consumed by an MDSi customer to submit an array of sales orders.</p>
+        <h4>URL</h4>
+        <pre><code>POST {baseUrl}/{MDSI}/customers/{DivisionErpId}/salesOrders</code></pre>
+
+        <h4>Payload</h4>
+        <pre><code>{
+    "salesOrders": [
+        {
+            "address": {
+                "city": "string",
+                "countryAlpha2Code": "string",
+                "locationCode": "string",
+                "postalCode": "string",
+                "street1": "string",
+                "street2": "string",
+                "subdivisionAlpha2Code": "string"
+            },
+            "contact": {
+                "emailAddress": "string",
+                "name": "string",
+                "phoneNumber": "string"
+            },
+            "fromOrg": "string",
+            "comcastFlowId": "string",
+            "customerProjectId": "string",
+            "customerReferenceNumber": "string",
+            "customerRequisitionNumber": "string",
+            "notes": "string",
+            "notificationEmails": [
+                "string"
+            ],
+            "products": [
+                {
+                    "cifaNumber": "string",
+                    "quantity": "int",
+                    "lineNumber": "int",
+                    "fromSubinventory": "string"
+                }
+            ],
+            "requestedDeliveryDate": "string"
+        }
+    ]
+}</code></pre>
+
+
+
+        <h3>Data Dictionary</h3>
+        <h4>address: required</h4>
+        <p>
+            This is the address to which you want the equipment shipped. There is no business or geocoding validation
+            performed.
+        </p>
+        <ul>
+            <li>locationCode: required, string, passed value is truncated to a max length of 30</li>
+        </ul>
+        <ul>
+            <li>street1: required, string, max length 125</li>
+        </ul>
+        <ul>
+            <li>street2: optional, string, max length 125</li>
+        </ul>
+        <ul>
+            <li>city: required, string, max length 50</li>
+        </ul>
+        <ul>
+            <li>subdivisionAlpha2Code: required, string, max length 2, iso 3166 alpha 2 code for subdivision (state for
+                US)</li>
+        </ul>
+        <ul>
+            <li>postalCode: required, string, max length 10, no format validation</li>
+        </ul>
+        <ul>
+            <li>countryAlpha2Code: required, string, max length 2, iso 3166 alpha 2 code for country</li>
+        </ul>
+        <h4>contact: optional</h4>
+        <p>This is a contact person at the install or shipping location.</p>
+        <ul>
+            <li>name: optional, string, max length 50</li>
+            <li>if not passed, will be set to "No Name Provided"</li>
+        </ul>
+        <ul>
+            <li>phoneNumber: optional, string, max length 20, no format validation</li>
+            <li>if not passed, will be set to "1111111111"</li>
+        </ul>
+        <ul>
+            <li>emailAddress: optional, string, max length 80, no format validation</li>
+            <li>if not passed, will be set to "no-replies@mdsiinc.com"</li>
+        </ul>
+
+        <h4>notificationEmails: optional</h4>
+        Optional string array of notification emails addresses.
+        <ul>
+            <li>email: optional, string max length 100, no format validation</li>
+        </ul>
+        <h4>products: required</h4>
+        At least one product is required.
+        <ul>
+            <li>cifaNumber: required, string</li>
+        </ul>
+        <ul>
+            <li>quantity: required, int</li>
+        </ul>
+        <ul>
+            <li>lineNumber: required, int</li>
+        </ul>
+        <ul>
+            <li>fromSubinventory: optional, string</li>
+        </ul>
+        <h4>salesOrder root</h4>
+        <ul>
+            <li>customerReferenceNumber: optional, string, max length 30</li>
+        </ul>
+        <ul>
+            <li>customerRequisitionNumber: optional, string, max length 30</li>
+        </ul>
+        <ul>
+            <li>notes: optional, string, max length 4000</li>
+        </ul>
+        <ul>
+            <li>fromOrg: required, string, this is the org from which inventory is to be shipped</li>
+        </ul>
+        <ul>
+            <li>comcastFlowId: required, string, max length 200</li>
+        </ul>
+        <ul>
+            <li>customerProjectId: optional, string, max length 20</li>
+        </ul>
+        <ul>
+            <li>
+                requestedDeliveryDate: required, string, ISO 8601 format (e.g.: "2014-09-27T18:30:49-0300")- earliest 3
+                day SLA
+            </li>
+        </ul>
+
+        <h3>Response</h3>
+        <p>
+            If the API successfully receives the payload, a 204 No Content response is issued. Note that this does not
+            mean the
+            request successfully passed business validation, as downstream processing is done asynchronous.
+        </p>
+
+        <h4>HTTP Status Codes</h4>
+        <ul>
+
+            <li>204: No Content. The message was received and will be sent for business validation and processing.</li>
+            <li>400: Bad Request. The request payload is not formatted correctly.</li>
+            <li>
+                401: Unauthorized. The caller does not pass a valid access token. A valid access token should be passed
+                as a Bearer token in the Authorization header.
+            </li>
+            <li>
+                403: Forbidden. The caller's access token does not contain the necessary claims to perform the
+                operation or work with the data provided.
+            </li>
+            <li>
+                500: Internal Error. There is an error with the service. If this happens our development team is
+                notified of the error and you should contact support.
+            </li>
+            <li>
+                503: Service Not Available. The service is not available and may be being updated. Try again soon and
+                notify support if it continues to occur.
+            </li>
+        </ul>
+        <h2>Diagnostics</h2>
+        <h3>Version</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/version</code></pre>
+        <p>This endpoint will return a 200 with the version of the API.</p>
+        <h4>Parameters</h4>
+        <ul>
+            <li>?includeApiName=true: This will prepend the results with the name of the API.</li>
+        </ul>
+        <p></p>
+
+        <h3>Heartbeat</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/heartbeat</code></pre>
+        <p>This endpoint will return a 200 if the heartbeat is successful.</p>
+
+        <h3>Authentication Test</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/authenticationTest</code></pre>
+        <p>This endpoint will return a 200 if the access token is valid.</p>
+
+        <h3>Api Name</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/apiName</code></pre>
+        <p>This endpoint will return a 200 with the name of the API.</p>
+
+        <br />
+        <a href="#">Back to top</a>
+
+    </div>
+
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/chart.js"></script>
+    <script src="../assets/js/tablesorter.min.js"></script>
+    <script src="../assets/js/toolkit.js"></script>
+    <script src="../assets/js/application.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script>
+        // execute/clear BS loaders for docs
+        $(function () {
+            while (window.BS && window.BS.loader && window.BS.loader.length) {
+                (window.BS.loader.pop())();
+            }
+        })
+    </script>
+</body>
+<footer>
+    <div id="devops-version-number" style="text-align: center; color: #687187;"></div>
+</footer>
+
+</html>

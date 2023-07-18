@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <title>
+        MDSi Peter Pan API Documentation
+    </title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+
+    <link href="assets/css/toolkit-inverse.css" rel="stylesheet">
+
+    <link href="assets/css/docs.css" rel="stylesheet">
+
+    <link href="assets/css/application.css" rel="stylesheet">
+    <style>
+        /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+        /* this chunk of css is not part of the toolkit :) */
+
+        body {
+            min-width: 100%;
+            width: 1px;
+            *width: 100%;
+        }
+    </style>
+</head>
+
+<body class="with-top-navbar">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand navbar-brand-emphasized" href="index.html">
+                    <span><img class="img-responsive logo" src="assets/img/mdsi-logo-white.gif" alt="MDSi Logo" /></span>
+                    <span class="navbar-brand-icon"></span>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="index.html">Overview</a>
+                    </li>
+                    <li>
+                        <a href="releases/index.html">Releases</a>
+                    </li>
+                    <li class="active">
+                        <a href="versioning.html">Versioning</a>
+                    </li>
+                    <li>
+                        <a href="security.html">Security</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="docs-header" id="content">
+        <div class="container">
+            <h1>peter pan</h1>
+            <p>Peter Pan is a RESTful API for Comcast to create sales orders with MDSi.</p>
+        </div>
+    </div>
+    <div class="container docs-content">
+
+        <h2>Versioning</h2>
+        <p>We use flavor semantic versioning for the API.</p>
+        <p>Instead of Major.Minor.Patch, however, we use Major.Minor.Build.Revision. The Major and Minor numbers are part of
+            the URL.</p>
+        <h3>Major</h3>
+        <p>
+            If we make a breaking change to the API, we'll update the major version. Updating a major version may require code changes
+            on your part.
+        </p>
+        <h3>Minor</h3>
+        <p>
+            If we add new features but don't change any contracts, we'll update the minor version. You can safely upgrade minor versions
+            without worrying about your code breaking.
+        </p>
+        <h3>Build</h3>
+        <p>
+            This is the internal build number in YYDoY (Year + Day of Year) format. For example, 1.0.19323.1 was deployed on the 323rd day
+            of 2019, which is November 19, 2019.
+        </p>
+        <h3>Revision</h3>
+        <p>
+            This is the number of times the code was built during the day. 1.0.19323.7 would indicate 7 revisions on November 19th.
+        </p>
+        <h2>Examples</h2>
+        Major and minor version changes have their own URLs. Changes to build and revision do not change the URL.
+        <ul>
+            <li>The base URL of v1.0 of the API would be https://mdsi-peter-pan-eus-uat-v1-0.azurewebsites.net/api</li>
+            <li>The base URL of v1.1 of the API would be https://mdsi-peter-pan-eus-uat-v1-1.azurewebsites.net/api</li>
+            <li>The base URL of v2.0 of the API would be https://mdsi-peter-pan-eus-uat-v2-0.azurewebsites.net/api</li>
+        </ul>
+    </div>
+
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/chart.js"></script>
+    <script src="assets/js/tablesorter.min.js"></script>
+    <script src="assets/js/toolkit.js"></script>
+    <script src="assets/js/application.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script>
+        // execute/clear BS loaders for docs
+        $(function () {
+            while (window.BS && window.BS.loader && window.BS.loader.length) {
+                (window.BS.loader.pop())();
+            }
+        })
+    </script>
+</body>
+<footer>
+    <div id="devops-version-number" style="text-align: center; color: #687187;"></div>
+</footer>
+</html>

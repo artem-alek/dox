@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <title>
+        MDSi Peter Pan API Documentation
+    </title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+
+    <link href="../assets/css/toolkit-inverse.css" rel="stylesheet">
+
+    <link href="../assets/css/docs.css" rel="stylesheet">
+
+    <link href="../assets/css/application.css" rel="stylesheet">
+    <style>
+        /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+        /* this chunk of css is not part of the toolkit :) */
+
+        body {
+            min-width: 100%;
+            width: 1px;
+            *width: 100%;
+        }
+    </style>
+</head>
+
+<body class="with-top-navbar">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand navbar-brand-emphasized" href="index.html">
+                    <span>
+                        <img class="img-responsive logo" src="../assets/img/mdsi-logo-white.gif" alt="MDSi Logo" />
+                    </span>
+                    <span class="navbar-brand-icon"></span>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="../index.html" onclick="changeActiveAttribute('overview')">Overview</a>
+                    </li>
+                    <li class="active">
+                        <a href="../releases/index.html">Releases</a>
+                    </li>
+                    <li>
+                        <a href="../versioning.html">Versioning</a>
+                    </li>
+                    <li>
+                        <a href="../security.html">Security</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="docs-header" id="content">
+        <div class="container">
+            <h1>peter pan</h1>
+            <p>Peter Pan is a RESTful API for Comcast to create sales orders with MDSi.</p>
+        </div>
+    </div>
+    <div class="container docs-content">
+        <h2>Version 2.0</h2>
+        <p>Version 2.0 is to be used by all Comcast customers other then the Comcast Asset Recover Center (COMC901).</p>
+        <h3>Endpoints</h3>
+        <ul>
+            <li>Deployment Requests</li>
+            <li>Diagnostics/Version</li>
+            <li>Diagnostics/Heartbeat</li>
+            <li>Diagnostics/Authentication Test</li>
+            <li>Diagnostics/Api Name</li>
+        </ul>
+        <h3>Base URLS</h3>
+        <ul>
+            <li>
+                UAT
+                <pre><code>https://mdsi-peter-pan-eus-uat-v2-0.azurewebsites.net/api/</code></pre>
+            </li>
+            <li>
+                PRD
+                <pre><code>https://mdsi-peter-pan-eus-prd-v2-0.azurewebsites.net/api/</code></pre>
+            </li>
+        </ul>
+        <h3>Security</h3>
+        <h4>HTTP Status Codes</h4>
+        <ul>
+            <li>If you do not pass a valid access token, you will receive a 401 unauthorized response.</li>
+            <li>
+                If you do not pass a static function key in the header (key=x-functions-key), you will receive a 401
+                unauthorized response.
+            </li>
+            <li>
+                If your API key access token is valid, yet it does not contain the correct scope, you will receive a 403
+                forbidden response.
+            </li>
+            <li>
+                If your API key access token is valid, yet you request data for a customer to which you token is not
+                bound, you will receive a 403 forbidden response.
+            </li>
+        </ul>
+
+        <h2>API Endpoints</h2>
+        <h3>Deployment Requests</h3>
+        <p>This API endpoint is consumed by an MDSi customer to submit an array of sales orders.</p>
+        <h4>URL</h4>
+        <pre><code>POST {baseUrl}/mdsi/customers/{DivisionErpId}/deploymentRequests</code></pre>
+        <p>IMPORTANT: Note the {DivisionErpId} property in the route. This is your MDSI customer number such as COMC120,
+            COMC124, etc.</p>
+
+        <h4>Payload</h4>
+        <pre><code>
+{
+    "contact": {
+        "emailAddress": "tom@thomashundley.com",
+        "name": "Tom Hundley",
+        "phoneNumber": "111-111-1111"
+    },
+    "deploymentRequestName": "my deployment request name",
+    "deploymentRequestTypeId": "0586029e-a582-411f-8421-536a89c84795",
+    "installAddressLocationCode": "000815-PAB-279 Bridgewater Rd",
+    "notes": "do this and do that",
+    "notificationEmails": [
+      "mickey@mouse.com",
+      "donald@duck.com",
+    ],
+    "primaryReferenceNumber": "ABCD",
+    "products": [
+        {
+            "cifaNumber": "000089998",
+            "productNumber": "",
+            "lineNumber": 1,
+            "quantity": 1
+        }
+    ],
+    "projectId": "130418",
+    "requestedDeliveryDate": "2023-10-05",
+    "requesterFullName": "Peter Pan",
+    "requesterEmail": "peter@pan.com",
+    "secondaryReferenceNumber": "EFGH",
+    "shippingAddressLocationCode": "000815-PAB-279 Bridgewater Rd"
+}
+    </code></pre>
+        <h3>Data Dictionary</h3>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Property</th>
+                    <th>Data Type</th>
+                    <th>Required / Optional</th>
+                    <th>Max Length</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>contact.emailAddress</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>80 chars</td>
+                    <td>The email address of the contact.</td>
+                </tr>
+                <tr>
+                    <td>contact.name</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>50 chars</td>
+                    <td>The name of the contact.</td>
+                </tr>
+                <tr>
+                    <td>contact.phoneNumber</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>20 chars</td>
+                    <td>The phone number of the contact. No format validation is performed as of yet. Eventually we'll add regex based on country code, but that's vNext.</td>
+                </tr>
+                <tr>
+                    <td>deploymentRequestName</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>An optional identifier for the deployment request. This is a human readable description for users to easily </td>
+                </tr>
+                <tr>
+                    <td>deploymentRequestType</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>Predefined in Acuity v4 and provided to Comcast.</td>
+                </tr>
+                <tr>
+                    <td>installAddressLocationCode</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>The location code for the installation address. Must be predefined in Acuity v4.</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>string</td>
+                    <td>Optional</td>
+                    <td>-</td>
+                    <td>Additional notes or comments.</td>
+                </tr>
+                <tr>
+                    <td>notificationEmails</td>
+                    <td>string array</td>
+                    <td>Optional</td>
+                    <td>-</td>
+                    <td>An array of extra email addresses to receive notifications. Notifications are automatically sent
+                        to the requester.</td>
+                </tr>
+                <tr>
+                    <td>primaryReferenceNumber</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>The primary reference number, typically the purchase order number. Note this maps to the MDSi
+                        CustomerPurchaseOrder number in Acuity V4, which maps to CustomerRequsitionNumber in D365.</td>
+                </tr>
+                <tr>
+                    <td>projectId</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>The Comcast ID of the project.Note this is the customer project Id, not the internal Cosmos DB
+                        project ID.</td>
+                </tr>
+                <tr>
+                    <td>requestedDeliveryDate</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>YYYY-MM-YY</td>
+                </tr>
+                <tr>
+                    <td>requesterFullName</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>The name of the person requesting the deployment. This gets mapped to CreateByUserFullName in Acuity v4.</td>
+                </tr>
+                <tr>
+                    <td>requesterEmail</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>The email of the person requesting the deployment. This gets mapped to CreateByUserEmail in Acuity v4.</td>
+                </tr>
+                <tr>
+                    <td>secondaryReferenceNumber</td>
+                    <td>string</td>
+                    <td>Optional</td>
+                    <td>-</td>
+                    <td>The secondary reference number. Note that this maps to Customer Reference Number in Acuity v4
+                        which maps to CustomerReferenceNumber in D365.</td>
+                </tr>
+                <tr>
+                    <td>shippingAddressLocationCode</td>
+                    <td>string</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>The location code for the shipping address. Must be predefined in Acuity v4.</td>
+                </tr>
+                <tr>
+                    <td>products</td>
+                    <td>array</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>An array </td>
+                </tr>
+                <tr>
+                    <td>products.cifaNumber</td>
+                    <td>string</td>
+                    <td>Optional</td>
+                    <td>-</td>
+                    <td>Must either pass cifaNumber, productNumber, (manufacturer itemId), or both.  Sending both is ideal as MDSi can have multiple ProductNumbers mapped to a single CIFA number.</td>
+                </tr>
+                <tr>
+                    <td>products.productNumber</td>
+                    <td>string</td>
+                    <td>Optional</td>
+                    <td>-</td>
+                    <td>Must either pass cifaNumber, productNumber, (manufacturer itemId), or both.  Sending both is ideal as MDSi can have multiple ProductNumbers mapped to a single CIFA number.</td>
+                </tr>
+                <tr>
+                    <td>products.lineNumber</td>
+                    <td>int</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>Comcast line number.</td>
+                </tr>
+                <tr>
+                    <td>products.quantity</td>
+                    <td>int</td>
+                    <td>Required</td>
+                    <td>-</td>
+                    <td>The quantity of the product.</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+        <h3>Response</h3>
+        <p>
+            If the API successfully receives the payload, a 204 No Content response is issued. Note that this does
+            not
+            mean the
+            request successfully passed business validation, as downstream processing is done asynchronous.
+        </p>
+
+        <h4>HTTP Status Codes</h4>
+        <ul>
+
+            <li>204: No Content. The message was received and will be sent for business validation and processing.
+            </li>
+            <li>400: Bad Request. The request payload is not formatted correctly.</li>
+            <li>
+                401: Unauthorized. The caller does not pass a valid access token. A valid access token should be
+                passed
+                as a Bearer token in the Authorization header.
+            </li>
+            <li>
+                403: Forbidden. The caller's access token does not contain the necessary claims to perform the
+                operation or work with the data provided.
+            </li>
+            <li>
+                500: Internal Error. There is an error with the service. If this happens our development team is
+                notified of the error and you should contact support.
+            </li>
+            <li>
+                503: Service Not Available. The service is not available and may be being updated. Try again soon
+                and
+                notify support if it continues to occur.
+            </li>
+        </ul>
+        <h2>Diagnostics</h2>
+        <h3>Version</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/version</code></pre>
+        <p>This endpoint will return a 200 with the version of the API.</p>
+        <h4>Parameters</h4>
+        <ul>
+            <li>?includeApiName=true: This will prepend the results with the name of the API.</li>
+        </ul>
+        <p></p>
+
+        <h3>Heartbeat</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/heartbeat</code></pre>
+        <p>This endpoint will return a 200 if the heartbeat is successful.</p>
+
+        <h3>Authentication Test</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/authenticationTest</code></pre>
+        <p>This endpoint will return a 200 if the access token is valid.</p>
+
+        <h3>Api Name</h3>
+        <h4>URL</h4>
+        <pre><code>GET {baseUrl}/diagnostics/apiName</code></pre>
+        <p>This endpoint will return a 200 with the name of the API.</p>
+
+        <br />
+        <a href="#">Back to top</a>
+
+    </div>
+
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/chart.js"></script>
+    <script src="../assets/js/tablesorter.min.js"></script>
+    <script src="../assets/js/toolkit.js"></script>
+    <script src="../assets/js/application.js"></script>
+    <script src="../assets/js/settings.js"></script>
+    <script>
+        // execute/clear BS loaders for docs
+        $(function () {
+            while (window.BS && window.BS.loader && window.BS.loader.length) {
+                (window.BS.loader.pop())();
+            }
+        })
+    </script>
+</body>
+<footer>
+    <div id="devops-version-number" style="text-align: center; color: #687187;"></div>
+</footer>
+
+</html>

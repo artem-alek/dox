@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <title>
+        MDSi Peter Pan API Documentation
+    </title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet" />
+
+    <link href="assets/css/toolkit-inverse.css" rel="stylesheet" />
+
+    <link href="assets/css/docs.css" rel="stylesheet" />
+
+    <link href="assets/css/application.css" rel="stylesheet" />
+    <style>
+        /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+        /* this chunk of css is not part of the toolkit :) */
+
+        body {
+            min-width: 100%;
+            width: 1px;
+            *width: 100%;
+        }
+    </style>
+</head>
+
+<body class="with-top-navbar">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand navbar-brand-emphasized" href="index.html">
+                    <span><img class="img-responsive logo" src="assets/img/mdsi-logo-white.gif" alt="MDSi Logo" /></span>
+                    <span class="navbar-brand-icon"></span>
+                </a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="index.html">Overview</a>
+                    </li>
+                    <li>
+                        <a href="releases/index.html">Releases</a>
+                    </li>
+                    <li>
+                        <a href="versioning.html">Versioning</a>
+                    </li>
+                    <li class="active">
+                        <a href="security.html">Security</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="docs-header" id="content">
+        <div class="container">
+            <h1>peter pan</h1>
+            <p>Peter Pan is a RESTful API for Comcast to create sales orders with MDSi.</p>
+        </div>
+    </div>
+    <div class="container docs-content">
+        <h1>Security</h1>
+        <h2>OAuth2 and OpenID Connect</h2>
+        <p>
+            Peter Pan implements OAuth2 and OpenID Connect as its security
+            architecture. Our Security Token Service (STS) uses
+            <a href="https://jwt.io/">JSON Web Tokens (JWT)</a> as bearer tokens.
+        </p>
+        <h2>Endpoints &amp; Configuration</h2>
+        <h3>UAT</h3>
+        <p>
+            <ul>
+                <li>UAT configuration
+                    <pre><code>GET https://mdsi-cloud-city-uat.auth0.com/.well-known/openid-configuration </code></pre></li>
+                <li>UAT tokens
+                    <pre><code>POST https://mdsi-cloud-city-uat.auth0.com/oauth/token </code></pre></li>
+                <li>UAT audience
+                    <pre><code>https://mdsi-peter-pan-uat-v1-0.azurewebsites.net/ </code></pre></li>
+            </ul>
+        </p>
+        <h3>PRD</h3>
+        <p>
+            <ul>
+                <li>PRD configuration
+                    <pre><code>GET https://mdsi-cloud-city-prd.auth0.com/.well-known/openid-configuration </code></pre>
+                <li>PRD tokens
+                    <pre><code>POST https://mdsi-cloud-city-prd.auth0.com/oauth/token </code></pre>
+                </li>
+                <li>PRD audience
+                    <pre><code>https://mdsi-peter-pan-prd-v1-0.azurewebsites.net/</code></pre>
+                </li>
+            </ul>
+        </p>
+        <h2>Getting an Access Token</h2>
+            <h3>Warning</h3>
+            <p>Access tokens contain your credentials. Please be very judicious about handling these tokens. Anyone who has your access token can use it as if they had your client ID and secret. Access tokens are valid for 24 hours.</p>
+
+            <h3>API Keys</h3>
+            <p>
+                To obtain the requisite API keys, please contact us at <a href="mailto:development@mdsiinc.com">development@mdsiinc.com</a>. You'll need three things to access the API,
+                each manually obtained by contacting MDSi.
+                <ul>
+                    <li>client_id</li>
+                    <li>client_secret</li>
+                    <li>x-functions-key</li>
+                </ul>
+            </p>
+            <h3>Content-Type</h3>
+            <p>
+                Set the content-type in your header as follows:
+                <ul>
+                    <li>Content-Type:application/x-www-form-urlencoded</li>
+                </ul>
+            </p>
+            <h3>Body</h3>
+            <p>
+
+                The following values must be x-www-form-urlencoded in the body of your request and passed to the token endopoint:
+                <ul>
+                    <li>grant_type:client_credentials</li>
+                    <li>scope:create:sales-orders</li>
+                    <li>client_id:{your client_id}</li>
+                    <li>client_secret:{your client_secret}</li>
+                    <li>audience:{audience (see Endpoints and Configuration)}</li>
+                </ul>
+            </p>
+            <h3>Scope</h3>
+            <p>
+                The following scopes must be requested when obtaining an access token:
+                <ul>
+                    <li>create:sales-orders</li>
+                </ul>
+                The scopes are sent as a space delimited value in the form. E.g.: scope: create:sales-orders update:sales-orders
+            </p>
+            <h3>Example</h3>
+            <p>
+                Here is a screen shot of using
+                <a href="https://www.postman.com/" target="_blank">Postman</a>
+                to obtain a security token from our STS.
+            </p>
+            <img class="img-responsive" src="assets/img/postman-example.png" alt="screen shot of postman" />
+            <h2>Calling an Endpoint</h2>
+            <p>
+                Once you have your access token, you need to pass it along with your static function key in the headers to the endpoint.
+                Note that the content-type for the business APIs is JSON, not x-www-form-urlencoded.
+                <ul>
+                    <li>Authorization:Bearer {accessToken}</li>
+                    <li>x-functions-key:{your static function key}</li>
+                    <li>Content-Type:application/json</li>
+                </ul>
+            </p>
+
+            <br />
+
+            <a href="#">Back to top</a>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/chart.js"></script>
+    <script src="assets/js/tablesorter.min.js"></script>
+    <script src="assets/js/toolkit.js"></script>
+    <script src="assets/js/application.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script>
+        // execute/clear BS loaders for docs
+        $(function () {
+            while (window.BS && window.BS.loader && window.BS.loader.length) {
+                window.BS.loader.pop()();
+            }
+        });
+    </script>
+</body>
+<footer>
+    <div id="devops-version-number" style="text-align: center; color: #687187;"></div>
+</footer>
+</html>
